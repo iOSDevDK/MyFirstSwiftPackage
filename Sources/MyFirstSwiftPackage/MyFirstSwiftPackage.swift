@@ -3,20 +3,19 @@ import Foundation
 
 public struct MyFirstSwiftPackage {
     public var text = "Hello, World!"
-    var delegate: ResponseProtocol?
 
     public init() {
-        
+
     }
     
-    func callGetAPI<T: Codable>(url: URL,type: T.Type) {
+    func callGetAPI<T: Codable>(url: URL?,type: T.Type, completion: @escaping (Result<T,NSError>) -> Void) {
+        guard let _ = url else {
+            completion(.failure(NSError(domain: "URL not available", code: 0)))
+            return
+        }
         let dict : [String : Any] = ["Key":"Value","status":0]
         guard let data = try? JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted) else { return }
         guard let response = try? JSONDecoder().decode(T.self, from: data) else { return }
-        delegate?.returnsData(data: response, type: T.self)
+        completion(.success(response))
     }
-}
-
-protocol ResponseProtocol {
-    func returnsData<T: Codable>(data: T, type: T.Type)
 }
