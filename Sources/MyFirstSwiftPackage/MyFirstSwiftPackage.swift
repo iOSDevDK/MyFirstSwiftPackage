@@ -8,7 +8,7 @@ public struct MyFirstSwiftPackage {
 
     }
     
-    func callGetAPI<T: Codable>(url: URL?,type: T.Type, completion: @escaping (Result<T,NSError>) -> Void) {
+    public func callGetAPI<T: Codable>(url: URL?,type: T.Type, completion: @escaping (Result<T,NSError>) -> Void) {
         guard let _ = url else {
             completion(.failure(NSError(domain: "URL not available", code: 0)))
             return
